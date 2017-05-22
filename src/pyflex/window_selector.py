@@ -621,8 +621,9 @@ class WindowSelector(object):
             self.event.latitude, self.event.longitude)
         tts = getTravelTimes(dist_in_deg, self.event.depth_in_m / 1000.0,
                              model=self.config.earth_model)
-        # Hardcoded Rayleigh arrivals
+        # Hardcoded surface wave arrivals
         r_vel = self.config.min_surface_wave_velocity
+        g_vel = self.config.max_surface_wave_velocity
         dist = np.sqrt((dist_in_deg*111)**2 +
                        (self.event.depth_in_m/1000.0)**2)
         major_dist = np.sqrt(((360 - dist_in_deg)*111)**2 +
@@ -636,6 +637,14 @@ class WindowSelector(object):
             {
                 "phase_name": "R2",  # major arc
                 "time": major_dist/r_vel
+            },
+            {
+                "phase_name": "G1",  # minor arc
+                "time": dist/g_vel
+            },
+            {
+                "phase_name": "G2",  # major arc
+                "time": major_dist/g_vel
             }]
 
         tts.extend(surface_tts)
